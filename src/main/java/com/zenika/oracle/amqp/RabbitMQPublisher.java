@@ -31,7 +31,7 @@ public class RabbitMQPublisher {
 	private final static int E_CANNOT_CLOSE = -2;
 
 	// enable/disable the debug output
-	private final static boolean ENABLE_DEBUG = true;
+	private final static boolean ENABLE_DEBUG = false;
 
 	// -1 means infinity; value is in milliseconds
 	private final static int CONNECTION_CLOSE_TIMEOUT = 2000;
@@ -65,13 +65,14 @@ public class RabbitMQPublisher {
 		// FIXME declare on all brokers for brokerId?
 		Connection connection = null;
 		Channel channel = null;
+		boolean durable = true;
 		try {
 			BrokerConnectionState connectionState = getConnectionState(brokerId);
 			connection = openConnection(connectionState);
 			channel = connection.createChannel();
 
 			// declare the exchange
-			channel.exchangeDeclare(exchange, type);
+			channel.exchangeDeclare(exchange, type, durable);
 
 		} catch (IOException ioe) {
 			ioe.printStackTrace();
